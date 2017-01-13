@@ -13,7 +13,24 @@ class LimitedSortedMapTable extends Component {
       <MapTable keyHead={this.props.keyHead} valueHead={this.props.valueHead} map={?} />
     );
     */
-    return null;
+    const sortedEntries = this.props.map.entrySeq().sort(this.props.valueSortFn);
+    let limitedSortedMap, otherMapEntry;
+
+    if (sortedEntries.size > this.props.limit) {
+      limitedSortedMap = Immutable.OrderedMap(sortedEntries.slice(0, this.props.limit));
+      otherMapEntry = sortedEntries.slice(this.props.limit).reduce((reduction, value) => {
+        return reduction + value[1];
+      }, 0);
+    } else {
+      limitedSortedMap = Immutable.OrderedMap(sortedEntries);
+      otherMapEntry = 0;
+    }
+
+    const map = limitedSortedMap.set('<Other>', otherMapEntry);
+    
+    return (
+      <MapTable keyHead={this.props.keyHead} valueHead={this.props.valueHead} map={map} />
+    );
   }
 }
 
