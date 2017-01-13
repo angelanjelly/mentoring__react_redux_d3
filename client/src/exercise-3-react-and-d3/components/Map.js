@@ -8,7 +8,9 @@ class Map extends Component {
     /*
     How to mount the D3 component and return it from this `render()` function?
     */
-    return null;
+    const root = ReactFauxDOM.createElement('svg');
+    d3Map(root, this.props.points);
+    return root.toReact();
   }
 }
 
